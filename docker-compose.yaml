@@ -1,0 +1,33 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: backend-dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI
+    volumes:
+      - ./backend:/app
+    networks:
+      - app-network  
+    
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: frontend-dockerfile
+    ports: 
+      - "4000:4000"
+    environment:
+      - BACKEND_URL=http://backend:5000
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+
+networks:
+  app-network: {}
